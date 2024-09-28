@@ -22,13 +22,28 @@ import (
 )
 
 func main() {
+	go startWeb()
     NewBot("628388024064", func(k string) { //masukkan nomor kamu yang ingin di pasangkan auto read story wa
         println(k)
     }) 
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Hello, World!")
+    }
+
+func startWeb() {
+	/* web server */
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Port default jika tidak ada yang disetel
+	}
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "whatsmeow Bot Connected")
 	})
-	http.ListenAndServe(":8080", nil)
+
+	err := http.ListenAndServe(":"+port, nil)
+	if err != nil {
+		fmt.Println("Error starting server:", err)
+	}
+	/* end web server */
 }
 
 func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
