@@ -4,6 +4,7 @@ import (
     "context"
     "fmt"
     "math/rand"
+    "net/http
     "os"
     "strings"
     "time"
@@ -24,6 +25,10 @@ func main() {
     NewBot("628388024064", func(k string) { //masukkan nomor kamu yang ingin di pasangkan auto read story wa
         println(k)
     }) 
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "Hello, World!")
+	})
+	http.ListenAndServe(":8080", nil)
 }
 
 func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
