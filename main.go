@@ -21,30 +21,26 @@ import (
     "github.com/mdp/qrterminal"
 )
 
+func Handler(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprint(w, "whatsmeow Bot Connected")
+}
 func main() {
-	go startWeb()
+	
+http.HandleFunc("/", Handler)
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
+    err := http.ListenAndServe(":"+port, nil)
+    if err != nil {
+        fmt.Println("Error starting server:", err)
+    }
+	
     NewBot("628388024064", func(k string) { //masukkan nomor kamu yang ingin di pasangkan auto read story wa
         println(k)
     }) 
     }
 
-func startWeb() {
-	/* web server */
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080" // Port default jika tidak ada yang disetel
-	}
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "whatsmeow Bot Connected")
-	})
-
-	err := http.ListenAndServe(":"+port, nil)
-	if err != nil {
-		fmt.Println("Error starting server:", err)
-	}
-	/* end web server */
-}
 
 func registerHandler(client *whatsmeow.Client) func(evt interface{}) {
     return func(evt interface{}) {
